@@ -1,31 +1,98 @@
+body {
+  background: #fff5f8;
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+}
+
+.app-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #ffe4ec, #fff5f8);
+  border-bottom: 2px solid #ffd6e0;
+}
+
+.app-header h1 {
+  color: #ff4d88;
+  font-size: 34px;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 5px rgba(255, 105, 180, 0.3);
+}
+
+.subtitle {
+  color: #888;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+#searchInput {
+  width: 60%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border-radius: 25px;
+  border: 1px solid #ffc0cb;
+  outline: none;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
+  transition: 0.2s;
+}
+
+#searchInput:focus {
+  border-color: #ff69b4;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
 #root {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
+  gap: 20px;
   padding: 20px;
-  color: red;
 }
 
 .episode-card {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px;
   text-align: center;
+  box-shadow: 0 6px 15px rgba(255, 182, 193, 0.25);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.episode-card:hover {
+  transform: translateY(-5px) scale(1.02);
 }
 
 .episode-card h3 {
   font-size: 16px;
   margin-bottom: 10px;
+  color: #ff4d88;
+  font-weight: 600;
 }
 
 .episode-card img {
   width: 100%;
   height: 140px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 12px;
 }
+
 .episode-card p {
   font-size: 13px;
+  margin-top: 10px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.episode-card::after {
+  content: "✨";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.count {
+  text-align: center;
+  color: #ff69b4;
+  font-weight: bold;
   margin-top: 10px;
 }
