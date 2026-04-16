@@ -41,7 +41,6 @@ function makePageForEpisodes(episodeList) {
 function setup() {
   const allEpisodes = getAllEpisodes();
 
-  // 🔍 Search functionality
   const searchInput = document.getElementById("searchInput");
 
   searchInput.addEventListener("input", (e) => {
@@ -57,7 +56,6 @@ function setup() {
     makePageForEpisodes(filteredEpisodes);
   });
 
-  // Initial load
   makePageForEpisodes(allEpisodes);
 }
 
