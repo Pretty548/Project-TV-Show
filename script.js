@@ -30,8 +30,14 @@ function makePageForEpisodes(episodeList) {
         episode.season,
         episode.number,
       )})</h3>
-      <img src="${episode.image?.medium || ""}" alt="${episode.name}">
-      <p>${episode.summary || "No summary available"}</p>
+
+      ${
+        episode.image?.medium
+          ? `<img src="${episode.image.medium}" alt="${episode.name}">`
+          : `<p>No image available</p>`
+      }
+
+      <div>${episode.summary || "No summary available"}</div>
     `;
 
     rootElem.appendChild(card);
@@ -40,22 +46,6 @@ function makePageForEpisodes(episodeList) {
 
 function setup() {
   const allEpisodes = getAllEpisodes();
-
-  const searchInput = document.getElementById("searchInput");
-
-  searchInput.addEventListener("input", (e) => {
-    const searchText = e.target.value.toLowerCase();
-
-    const filteredEpisodes = allEpisodes.filter((episode) => {
-      return (
-        episode.name.toLowerCase().includes(searchText) ||
-        episode.summary.toLowerCase().includes(searchText)
-      );
-    });
-
-    makePageForEpisodes(filteredEpisodes);
-  });
-
   makePageForEpisodes(allEpisodes);
 }
 
