@@ -4,6 +4,27 @@ function formatEpisodeCode(season, number) {
   return `S${s}E${n}`;
 }
 
+function createEpisodeCard(episode) {
+  let cardDiv = document.createElement("div");
+  cardDiv.className = "episode-card";
+
+  let title = document.createElement("h3");
+  let episodeCode = formatEpisodeCode(episode.season, episode.number);
+  title.innerText = episode.name + " - " + episodeCode;
+
+  let image = document.createElement("img");
+  image.src = episode.image.medium;
+
+  let summary = document.createElement("div");
+  summary.innerHTML = episode.summary;
+
+  cardDiv.appendChild(title);
+  cardDiv.appendChild(image);
+  cardDiv.appendChild(summary);
+
+  return cardDiv;
+}
+
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
@@ -21,21 +42,8 @@ function makePageForEpisodes(episodeList) {
     return;
   }
 
-  episodeList.forEach((episode) => {
-    const card = document.createElement("div");
-    card.className = "episode-card";
-
-    card.innerHTML = `
-      <h3>${episode.name} (${formatEpisodeCode(
-        episode.season,
-        episode.number,
-      )})</h3>
-      <img src="${episode.image?.medium || ""}" alt="${episode.name}">
-      <p>${episode.summary || "No summary available"}</p>
-    `;
-
-    rootElem.appendChild(card);
-  });
+  const episodeCard = episodeList.map(createEpisodeCard);
+  episodeCard.forEach((card) => rootElem.appendChild(card));
 }
 
 function setup() {
