@@ -44,9 +44,38 @@ function makePageForEpisodes(episodeList) {
   });
 }
 
+let allEpisodes = [];
+
+function showLoading() {
+  document.getElementById("root").innerHTML =
+    "<p>Loading episodes... please wait.</p>";
+}
+
+function showError(message) {
+  document.getElementById("root").innerHTML =
+    `<p>Error loading episodes: ${message}</p>`;
+}
+
 function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+  showLoading();
+
+  fetch("https://api.tvmaze.com/shows/82/episodes")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to load episodes");
+      }
+
+      return response.json();
+    })
+
+    .then((episodes) => {
+      allEpisodes = episodes;
+      makePageForEpisodes(allEpisodes);
+    })
+
+    .catch((error) => {
+      showError(error.message);
+    });
 }
 
 window.onload = setup;
