@@ -5,6 +5,19 @@ function formatEpisodeCode(season, number) {
   return `S${s}E${n}`;
 }
 
+let allEpisodes = [];
+let showsCache = {};
+let episodesCache = {};
+
+function showLoading() {
+  document.getElementById("root").innerHTML =
+    "<p>Loading episodes... please wait.</p>";
+}
+function showError(message) {
+  document.getElementById("root").innerHTML =
+    `<p>Error loading episodes: ${message}</p>`;
+}
+
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
@@ -71,12 +84,25 @@ function setup() {
 
     .then((episodes) => {
       allEpisodes = episodes;
-      makePageForEpisodes(allEpisodes);
-    })
 
-    .catch((error) => {
-      showError(error.message);
+      makePageForEpisodes(allEpisodes);
     });
+  populateEpisodeSelector().catch((error) => {
+    showError(error.message);
+  });
 }
+document
+  .getElementById("episodeSelect")
+  .addEventListener("change", function (e) {
+    if (!e.target.value) {
+      makePageForEpisodes(allEpisodes);
+
+      return;
+    }
+
+    const selectedEpisode = allEpisodes.filter((ep) => ep.id == e.target.value);
+
+    makePageForEpisodes(selectedEpisode);
+  });
 
 window.onload = setup;
