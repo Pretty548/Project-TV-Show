@@ -1,3 +1,8 @@
+function showLoadingMessage() {
+  const rootElem = document.getElementById("root");
+  rootElem.innerHTML = "<p>Loading episodes...</p>";
+}
+
 function formatEpisodeTitle(name, season, number) {
   const s = String(season).padStart(2, "0");
   const n = String(number).padStart(2, "0");
@@ -102,6 +107,7 @@ async function fetchEpisodes() {
 }
 
 async function setup() {
+  showLoadingMessage();
   const allEpisodes = await fetchEpisodes();
 
   const searchInput = document.getElementById("searchInput");
