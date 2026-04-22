@@ -1,3 +1,4 @@
+const episodesCache = {};
 let currentEpisodes = [];
 
 function showLoadingMessage() {
@@ -143,6 +144,10 @@ async function fetchShows() {
 }
 
 async function fetchEpisodes(showId) {
+  if (episodesCache[showId]) {
+    return episodesCache[showId];
+  }
+
   try {
     const response = await fetch(
       `https://api.tvmaze.com/shows/${showId}/episodes`,
@@ -151,6 +156,8 @@ async function fetchEpisodes(showId) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const episodes = await response.json();
+    episodesCache[showId] = episodes;
+
     return episodes;
   } catch (error) {
     showErrorMessage("Failed to load episodes. Please try again later.");
