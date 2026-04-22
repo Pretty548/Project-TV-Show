@@ -1,3 +1,4 @@
+let showsCache = null;
 const episodesCache = {};
 let currentEpisodes = [];
 
@@ -126,6 +127,7 @@ function setupEpisodeSelect(episodes) {
 }
 
 async function fetchShows() {
+  if (showsCache) return showsCache;
   try {
     const response = await fetch("https://api.tvmaze.com/shows");
     if (!response.ok) {
