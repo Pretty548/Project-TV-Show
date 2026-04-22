@@ -131,7 +131,9 @@ async function fetchShows() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const shows = await response.json();
-    shows.sort((a, b) => a.name.localeCompare(b.name));
+    shows.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+    );
 
     return shows;
   } catch (error) {
