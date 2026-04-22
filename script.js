@@ -1,4 +1,4 @@
-// If an error occurred loading the data, notify the user.
+let currentEpisodes = [];
 
 function showLoadingMessage() {
   const rootElem = document.getElementById("root");
@@ -58,19 +58,44 @@ function makePageForEpisodes(episodeList) {
     return;
   }
 
-  const episodeCard = episodeList.map(createEpisodeCard);
-  episodeCard.forEach((card) => rootElem.appendChild(card));
+  const episodeCards = episodeList.map(createEpisodeCard);
+  episodeCards.forEach((card) => rootElem.appendChild(card));
 }
 
-function setupEpisodeSelect(allEpisodes) {
+function setupShowSelect(shows) {
+  const showSelect = document.getElementById("showSelect");
+  showSelect.innerHTML = "";
+
+  shows.forEach((show) => {
+    const option = document.createElement("option");
+    option.value = show.id;
+    option.innerText = show.name;
+    showSelect.appendChild(option);
+  });
+
+  showSelect.onchange = async (event) => {
+    const selectedShowId = event.target.value;
+
+    showLoadingMessage();
+    currentEpisodes = await fetchEpisodes(selectedShowId);
+
+    document.getElementById("searchInput").value = "";
+
+    setupEpisodeSelect(currentEpisodes);
+    makePageForEpisodes(currentEpisodes);
+  };
+}
+
+function setupEpisodeSelect(episodes) {
   const episodeSelect = document.getElementById("episodeSelect");
+  episodeSelect.innerHTML = "";
 
   const defaultOption = document.createElement("option");
   defaultOption.value = "all";
   defaultOption.innerText = "Show All Episodes";
   episodeSelect.appendChild(defaultOption);
 
-  allEpisodes.forEach((episode) => {
+  episodes.forEach((episode) => {
     const option = document.createElement("option");
     option.value = episode.id;
 
@@ -83,25 +108,42 @@ function setupEpisodeSelect(allEpisodes) {
     episodeSelect.appendChild(option);
   });
 
-  episodeSelect.addEventListener("change", (event) => {
+  episodeSelect.onchange = (event) => {
     const selectedId = event.target.value;
 
     if (selectedId === "all") {
-      makePageForEpisodes(allEpisodes);
+      makePageForEpisodes(episodes);
     } else {
-      const singleEpisode = allEpisodes.filter((episode) => {
+      const singleEpisode = episodes.filter((episode) => {
         return String(episode.id) === selectedId;
       });
       makePageForEpisodes(singleEpisode);
     }
 
     document.getElementById("searchInput").value = "";
-  });
+  };
 }
 
-async function fetchEpisodes() {
+async function fetchShows() {
   try {
-    const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
+    const response = await fetch("https://api.tvmaze.com/shows");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const shows = await response.json();
+
+    return shows;
+  } catch (error) {
+    showErrorMessage("Failed to load shows. Please try again later.");
+    return [];
+  }
+}
+
+async function fetchEpisodes(showId) {
+  try {
+    const response = await fetch(
+      `https://api.tvmaze.com/shows/${showId}/episodes`,
+    );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -109,20 +151,26 @@ async function fetchEpisodes() {
     return episodes;
   } catch (error) {
     showErrorMessage("Failed to load episodes. Please try again later.");
-    return;
+    return [];
   }
 }
 
 async function setup() {
   showLoadingMessage();
-  const allEpisodes = await fetchEpisodes();
+
+  const allShows = await fetchShows();
+  setupShowSelect(allShows);
+
+  const initialShowId = allShows.length > 0 ? allShows[0].id : 82;
+
+  currentEpisodes = await fetchEpisodes(initialShowId);
 
   const searchInput = document.getElementById("searchInput");
 
   searchInput.addEventListener("input", (e) => {
     const searchText = e.target.value.toLowerCase();
 
-    const filteredEpisodes = allEpisodes.filter((episode) => {
+    const filteredEpisodes = currentEpisodes.filter((episode) => {
       const name = episode.name ? episode.name.toLowerCase() : "";
       const summary = episode.summary ? episode.summary.toLowerCase() : "";
 
@@ -137,8 +185,8 @@ async function setup() {
     }
   });
 
-  setupEpisodeSelect(allEpisodes);
-  makePageForEpisodes(allEpisodes);
+  setupEpisodeSelect(currentEpisodes);
+  makePageForEpisodes(currentEpisodes);
 }
 
 window.onload = setup;
