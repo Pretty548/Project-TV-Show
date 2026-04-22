@@ -2,56 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Pretty’s Tv Project ✨</title>
-
-    <link rel="stylesheet" href="style.css" />
-
+    <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
     <header class="app-header">
       <h1>Pretty’s Tv Project ✨</h1>
-
-      <p class="subtitle">Find your favourite shows and episodes</p>
-
-      <a id="backToShows" href="#" style="display: none"> ← Back to Shows </a>
-
-      <div class="controls">
-        <select id="showSelect">
-          <option value="">Select a show</option>
-        </select>
-
-        <select id="episodeSelect">
-          <option value="">All Episodes</option>
-        </select>
-      </div>
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search shows or episodes..."
-      />
+      <p class="subtitle">Find your favourite episodes</p>
     </header>
 
-    <!-- COVER PAGE -->
-    <div id="showsRoot"></div>
+    <label for="showSelect">Select Show:</label>
+    <select id="showSelect"></select>
+    <label for="episodeSelect">Select Episode:</label>
+    <select id="episodeSelect"></select>
 
-    <!-- SELECTED SHOW DETAILS -->
-    <div id="showDetails" style="display: none"></div>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search episodes by name or summary..."
+    />
 
-    <!-- EPISODES PAGE -->
-    <div id="root" style="display: none"></div>
+    <div id="root"></div>
 
     <footer>
       Data originally from
-
-      <a href="https://tvmaze.com/" target="_blank"> TVMaze.com </a>
+      <a href="https://tvmaze.com/" target="_blank">TVMaze.com</a>
     </footer>
 
+    <!-- Scripts -->
     <script src="script.js"></script>
   </body>
 </html>
